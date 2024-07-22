@@ -47,8 +47,13 @@ $(function () {
       axios
         .post("/login", userData)
         .then(function (response) {
-          alert(response.data);
-          window.location.href = "/class-g2";
+          console.log("logg", response.data);
+          const { user } = response.data;
+          if (user.userType == "Admin") {
+            window.location.href = "/appointment";
+          } else if (user.userType == "Driver") {
+            window.location.href = "/class-g2";
+          }
         })
         .catch(function (error) {
           alert("Error: " + (error.response?.data || error.message));

@@ -41,7 +41,7 @@ const authenticate = async (req, res, next) => {
 };
 
 // Get Routes
-app.get("/", (req, res) => {
+app.get("/", authenticate, (req, res) => {
   res.render("index", { user: req.user });
 });
 
@@ -51,7 +51,6 @@ app.get("/login", (req, res) => {
 
 // Protected routes
 app.get("/class-g2", authenticate, (req, res) => {
-  console.log("req.user", req.user);
   if (req.user.userType === "Driver") {
     res.render("class-g2", { user: req.user });
   } else {
@@ -166,7 +165,7 @@ app.post("/login", async (req, res) => {
       return res.status(400).send("Invalid username or password.");
     }
     req.session.userId = user._id;
-    res.send("Login successful.");
+    res.send({ message: "Login Successful", user });
   } catch (error) {
     res.status(500).send(error.message);
   }
@@ -175,6 +174,14 @@ app.post("/login", async (req, res) => {
 app.get("/logout", (req, res) => {
   req.session.destroy();
   res.redirect("/login");
+});
+
+app.get("/appointment", authenticate, (req, res) => {
+  if (req.user.userType === "Admin") {
+    res.render("appointment", { user: req.user });
+  } else {
+    res.status(403).send("Forbidden");
+  }
 });
 
 // Listen
