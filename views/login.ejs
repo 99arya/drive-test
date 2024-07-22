@@ -2,35 +2,66 @@
 <%- include('components/header.ejs') %>
 
 <!-- Body content -->
-<div class="container">
-  <h1>Login</h1>
+<div class="row m-3">
+  <div class="col-md-6 col-sm-12">
+    <div class="container">
+      <h1>Login</h1>
 
-  <form>
-    <div class="mb-3">
-      <label for="exampleInputEmail1" class="form-label">Email address</label>
-      <input
-        type="email"
-        class="form-control"
-        id="exampleInputEmail1"
-        aria-describedby="emailHelp" />
-      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+      <form id="loginForm">
+        <div class="mb-3">
+          <label class="form-label" for="loginUsername">Username:</label>
+          <input class="form-control" type="text" id="loginUsername" name="username" />
+          <p id="loginUsername_error" class="error-message"></p>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="loginPassword">Password:</label>
+          <input class="form-control" type="password" id="loginPassword" name="password" />
+          <p id="loginPassword_error" class="error-message"></p>
+        </div>
+        <button class="btn btn-primary" type="submit">Login</button>
+      </form>
     </div>
+  </div>
 
-    <div class="mb-3">
-      <label for="exampleInputPassword1" class="form-label">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" />
+  <div class="col-md-6 col-sm-12">
+    <div class="container">
+      <h1>Sign Up</h1>
+      <form id="signupForm">
+        <div class="mb-3">
+          <label class="form-label" for="signupUsername">Username:</label>
+          <input class="form-control" type="text" id="signupUsername" name="username" />
+          <p id="signupUsername_error" class="error-message"></p>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="signupPassword">Password:</label>
+          <input class="form-control" type="password" id="signupPassword" name="password" />
+          <p id="signupPassword_error" class="error-message"></p>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="signupRepeatPassword">Repeat Password:</label>
+          <input
+            class="form-control"
+            type="password"
+            id="signupRepeatPassword"
+            name="repeatPassword" />
+          <p id="signupRepeatPassword_error" class="error-message"></p>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="signupUserType">User Type:</label>
+          <select class="form-control" id="signupUserType" name="userType">
+            <option value="Driver">Driver</option>
+            <option value="Examiner">Examiner</option>
+            <option value="Admin">Admin</option>
+          </select>
+          <p id="signupUserType_error" class="error-message"></p>
+        </div>
+        <button class="btn btn-primary" type="submit">Sign Up</button>
+      </form>
     </div>
-
-    <div class="mb-3 form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1" />
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-
-  <p>Under construction</p>
+  </div>
 </div>
+
+<script src="./js/login.js"></script>
 
 <!-- Import Footer -->
 <%- include('components/footer.ejs') %>

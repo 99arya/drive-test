@@ -95,9 +95,13 @@ $(function () {
       axios
         .post("/save-user", userData)
         .then(function (response) {
-          alert(response.data);
+          alert(response.data.message);
+          window.location.href = "/class-g2";
+          console.log("response.data", response.data.message);
         })
         .catch(function (error) {
+          console.log("response.data", error.response.data);
+
           alert("Error: " + error.response.data);
         });
     }

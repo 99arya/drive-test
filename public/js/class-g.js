@@ -103,4 +103,8 @@ $(function () {
       }
     });
   });
+
+  setTimeout(() => {
+    $("#fetchLicenseData").click();
+  }, 20);
 });

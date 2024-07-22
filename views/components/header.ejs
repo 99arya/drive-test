@@ -41,6 +41,8 @@
           <!-- Links -->
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
+              <% if(user && user.userType == "Driver"){ %>
+
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="/">Dashboard</a>
               </li>
@@ -54,8 +56,14 @@
               </li>
 
               <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+              </li>
+
+              <% } else { %>
+              <li class="nav-item">
                 <a class="nav-link" href="/login">Login</a>
               </li>
+              <% } %>
             </ul>
           </div>
         </div>

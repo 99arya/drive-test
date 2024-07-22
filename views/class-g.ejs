@@ -7,13 +7,14 @@
 
   <div class="container mt-5">
     <!-- Fetch Data with license number -->
-    <div class="row mb-5">
+    <div class="row mb-5" style="display: none">
       <div class="col-md-8">
         <label for="inputLicenseNumber" class="form-label">License number</label>
         <input
           type="text"
           class="form-control"
           id="inputLicenseNumber"
+          value="<%= user.licenseNumber %>"
           placeholder="Enter license number" />
       </div>
       <div class="col-md-4 fetch-cta-block">
