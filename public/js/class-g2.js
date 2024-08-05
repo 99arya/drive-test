@@ -1,4 +1,66 @@
 $(function () {
+  $(".user-profile .form-control").each((i, element) => {
+    if (element.value == "default" || element.value == 0 || !element.value)
+      element.removeAttribute("disabled");
+  });
+
+  $("#datepicker").datepicker();
+
+  // Search Date Click Handler
+  $("#search-appointment-date").on("click", function (event) {
+    let dateEntered = $("#datepicker").datepicker("getDate");
+
+    $(".available-slots").css("display", "block");
+    $("#slot-date").text(dateEntered.toDateString());
+
+    axios
+      .get(`/get-slots/${dateEntered.toDateString()}`)
+      .then(function (response) {
+        let { data } = response;
+
+        $(".no-slots").addClass("display-none");
+
+        if (data.length > 0) {
+          data.map((i) => {
+            console.log("i=>", i);
+            let slot = document.getElementById(i.time);
+            slot.classList.remove("display-none");
+          });
+        } else {
+          $(".no-slots").removeClass("display-none");
+        }
+      })
+      .catch(function (error) {
+        alert("Error: " + error.response?.data);
+      });
+  });
+
+  // Available slot click handler
+  $(".slot-available").on("click", function (event) {
+    $(".date-time-selected").css("display", "block");
+    selectedTime = event.currentTarget.innerText;
+    selectedDate = $("#datepicker").datepicker("getDate");
+
+    $(`#selected-date`).text(selectedDate.toDateString());
+    $(`#selected-time`).text(selectedTime);
+  });
+
+  // Book slot click handler
+  $("#book-slot").on("click", function (event) {
+    console.log(" selectedDate, selectedTime ", selectedDate, selectedTime);
+    axios
+      .post("/book-slot", { selectedDate, selectedTime })
+      .then(function (response) {
+        alert(response.data.message);
+        $(".date-time-selected").css("display", "none");
+        window.location.reload();
+      })
+      .catch(function (error) {
+        alert("Error: " + (error.response?.data || error.message));
+      });
+  });
+
+  // Update user click handler
   $("#g2-form").on("click", function (event) {
     event.preventDefault();
 
@@ -97,11 +159,9 @@ $(function () {
         .then(function (response) {
           alert(response.data.message);
           window.location.href = "/class-g2";
-          console.log("response.data", response.data.message);
         })
         .catch(function (error) {
           console.log("response.data", error.response.data);
-
           alert("Error: " + error.response.data);
         });
     }

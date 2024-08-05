@@ -58,14 +58,50 @@ nav {
   display: none;
 }
 
+.display-none {
+  display: none;
+}
+
 .slots {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
 }
 
-.slots .card {
+.slot-card {
   width: 150px;
   text-align: center;
   padding: 10px 0px;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+.slot-available:hover {
+  background-color: #108fff;
+  color: white;
+}
+
+.date-time-selected {
+  display: none;
+  padding: 25px;
+}
+
+#selected-date,
+#selected-time {
+  font-weight: bold;
+}
+
+.slot-booked {
+  background-color: #cecece;
+  cursor: not-allowed;
+}
+
+.no-slots {
+  color: red;
+}
+
+.appointment-booked {
+  border: 2px solid green;
+  padding: 20px;
+  border-radius: 5px;
 }

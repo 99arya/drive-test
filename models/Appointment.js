@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 
 // Appointment schema
 const AppointmentSchema = new mongoose.Schema({
-  date: { type: String },
+  date: { type: Date },
   time: { type: String },
-  dateTime: { type: Date },
   isTimeSlotAvailable: { type: Boolean, default: true },
 });
 

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { Schema } = mongoose;
 
 // User schema
 const UserSchema = new mongoose.Schema({
@@ -17,6 +18,7 @@ const UserSchema = new mongoose.Schema({
     year: { type: Number, default: 0 },
     plateNumber: { type: String, default: "default" },
   },
+  appointment: { type: Schema.Types.ObjectId, ref: "Appointment" },
 });
 
 // Pre-save hook to encrypt password and license number

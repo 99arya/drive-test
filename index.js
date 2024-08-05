@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 
 // Models
 const User = require("./models/User");
+const Appointment = require("./models/Appointment");
 const mongoose = require("mongoose");
 
 const uri =
@@ -28,12 +29,24 @@ mongoose
 // Middleware
 const authenticate = async (req, res, next) => {
   if (req.session.userId) {
-    const user = await User.findById(req.session.userId);
+    const user = await User.findById(req.session.userId).populate("appointment").exec();
 
     if (!user) {
       return res.redirect("/login");
     }
     req.user = user;
+
+    // Format user DOB
+    const userDOB = user.dob?.toISOString().split("T")[0];
+    req.user.userDOB = userDOB;
+
+    // Format user appointment date
+    if (user.appointment?.date) {
+      let userAppointmentDate;
+      userAppointmentDate = user.appointment?.date.toDateString();
+      req.user.appointment.userAppointmentDate = userAppointmentDate;
+    }
+
     next();
   } else {
     res.redirect("/login");
@@ -100,7 +113,6 @@ app.post("/save-user", async (req, res) => {
     },
   };
 
-  console.log("req.user@update", req.user);
   try {
     let foundUser = await User.findOneAndUpdate({ _id: req.session.userId }, updatedUser);
     res.status(200).json({ message: "User saved successfully", user: foundUser });
@@ -181,6 +193,94 @@ app.get("/appointment", authenticate, (req, res) => {
     res.render("appointment", { user: req.user });
   } else {
     res.status(403).send("Forbidden");
+  }
+});
+
+app.post("/create-slot", async (req, res) => {
+  const { selectedDate, selectedTime } = req.body;
+
+  const dateObj = new Date(selectedDate);
+  console.log("dateObj", dateObj);
+  const dateISO = dateObj.toISOString();
+
+  try {
+    const existingAppointment = await Appointment.findOne({
+      date: dateISO,
+      time: selectedTime,
+    });
+
+    if (existingAppointment) {
+      return res.status(400).send("Appointment already exists.");
+    }
+
+    const appointment = new Appointment({ date: selectedDate, time: selectedTime });
+    await appointment.save();
+    res.json({ message: "Created!", appointment: appointment });
+  } catch (error) {
+    res.status(500).send("Error updating car details: " + error.message);
+  }
+});
+
+app.get("/get-slots/:date", async (req, res) => {
+  const { date } = req.params;
+  console.log("date", date);
+  const dateObj = new Date(date);
+  console.log("dateObj", dateObj);
+
+  const dateISO = dateObj.toISOString();
+
+  try {
+    const appointments = await Appointment.find({ date: dateISO });
+
+    if (!appointments) {
+      res.status(404).send("No User Found");
+    } else {
+      res.status(200).json(appointments);
+    }
+  } catch (error) {
+    res.status(500).send("Error fetching user: " + error.message);
+  }
+});
+
+app.post("/book-slot", async (req, res) => {
+  const { selectedDate, selectedTime } = req.body;
+
+  const dateObj = new Date(selectedDate);
+  console.log("dateObj", dateObj);
+  const dateISO = dateObj.toISOString();
+
+  try {
+    // const existingAppointment = await Appointment.findOne({
+    //   date: dateISO,
+    //   time: selectedTime,
+    // });
+
+    let updatedAppointment = await Appointment.findOneAndUpdate(
+      { date: dateISO, time: selectedTime },
+      { isTimeSlotAvailable: false }
+    );
+
+    if (updatedAppointment) {
+      console.log("FOUND", updatedAppointment);
+
+      let updatedUser = await User.findOneAndUpdate(
+        { _id: req.session.userId },
+        { appointment: updatedAppointment._id }
+      );
+
+      console.log("updatedUser", updatedUser);
+
+      res.json({ message: "Slot Booked!", appointment: updatedAppointment });
+    } else {
+      console.log("NOT FOUND");
+      return res.status(400).send("Appointment not available.");
+    }
+
+    // const appointment = new Appointment({ date: selectedDate, time: selectedTime });
+    // await appointment.save();
+  } catch (error) {
+    console.log("err", error);
+    res.status(500).send("Error updating car details: " + error.message);
   }
 });
 
