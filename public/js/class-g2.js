@@ -23,8 +23,12 @@ $(function () {
         if (data.length > 0) {
           data.map((i) => {
             console.log("i=>", i);
-            let slot = document.getElementById(i.time);
-            slot.classList.remove("display-none");
+            if (i.isTimeSlotAvailable) {
+              let slot = document.getElementById(i.time);
+              slot.classList.remove("display-none");
+            } else {
+              $(".no-slots").removeClass("display-none");
+            }
           });
         } else {
           $(".no-slots").removeClass("display-none");
