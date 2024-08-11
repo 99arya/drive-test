@@ -9,7 +9,7 @@ const Appointment = require("./models/Appointment");
 const mongoose = require("mongoose");
 
 const uri =
-  "mongodb+srv://99aryaa:qwe123@conestoga.erpyj64.mongodb.net/?retryWrites=true&w=majority&appName=Conestoga";
+  "mongodb+srv://dharakansara994:hUJ4SYroevuH9Csy@cluster.ue5m1w7.mongodb.net/_main?retryWrites=true&w=majority&appName=Cluster";
 
 // Config
 const app = express();
@@ -95,6 +95,14 @@ app.get("/get-user/:licenseNumber", async (req, res) => {
   }
 });
 
+app.get("/examiner", authenticate, (req, res) => {
+  if (req.user.userType === "Examiner") {
+    res.render("examiner", { user: req.user });
+  } else {
+    res.status(403).send("Forbidden");
+  }
+});
+
 app.post("/save-user", async (req, res) => {
   const { firstName, lastName, licenseNumber, age, dob, carMake, carModel, carYear, plateNumber } =
     req.body;
@@ -177,10 +185,14 @@ app.post("/login", async (req, res) => {
       return res.status(400).send("Invalid username or password.");
     }
     req.session.userId = user._id;
-    res.send({ message: "Login Successful", user });
+    res.send({ message: "Login Successful", user: { username: user.username, userType: user.userType } });
+    console.log(req.user.userType);
   } catch (error) {
-    res.status(500).send(error.message);
-  }
+      if (!res.headersSent) {
+        res.status(500).send(error.message);
+      } else {
+        console.error("Error during login:", error.message);
+      }  }
 });
 
 app.get("/logout", (req, res) => {
@@ -285,6 +297,6 @@ app.post("/book-slot", async (req, res) => {
 });
 
 // Listen
-app.listen(3000, () => {
-  console.log("Hello! App listening on port 3000");
+app.listen(1000, () => {
+  console.log("Hello! App listening on port 1000");
 });

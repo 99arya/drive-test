@@ -26,6 +26,7 @@ $(function () {
       password: $("#loginPassword").val().trim(),
     };
     console.log("userData", userData);
+
     if (!isNonEmptyString(userData.username)) {
       errors.push({ field: "loginUsername", message: "Username is required to login." });
     }
@@ -35,6 +36,7 @@ $(function () {
     }
 
     console.log("errors", errors);
+    
     // Display errors
     errors.forEach((error) => {
       displayError(error.field, error.message);
@@ -53,6 +55,8 @@ $(function () {
             window.location.href = "/appointment";
           } else if (user.userType == "Driver") {
             window.location.href = "/class-g2";
+          } else if (user.userType == "Examiner"){
+            window.location.href = "/examiner"
           }
         })
         .catch(function (error) {

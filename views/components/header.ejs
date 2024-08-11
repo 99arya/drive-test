@@ -61,6 +61,9 @@
               </li>
 
               <% } else if(user && user.userType == "Admin"){ %>
+              <li class="nav-item">
+                <a class="nav-link" href="/admin">Admin Dashboard</a>
+              </li>
 
               <li class="nav-item">
                 <a class="nav-link" href="/appointment">Appointment</a>
@@ -69,6 +72,12 @@
               <li class="nav-item">
                 <a class="nav-link" href="/logout">Logout</a>
               </li>
+
+              <% } else if(user && user.userType == "Examiner"){ %>
+
+                <li class="nav-item">
+                  <a class="nav-link" href="/logout">Logout</a>
+                </li>
 
               <% } else { %>
               <li class="nav-item">
