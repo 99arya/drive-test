@@ -9,7 +9,7 @@ const Appointment = require("./models/Appointment");
 const mongoose = require("mongoose");
 
 const uri =
-  "mongodb+srv://dharakansara994:hUJ4SYroevuH9Csy@cluster.ue5m1w7.mongodb.net/_main?retryWrites=true&w=majority&appName=Cluster";
+  "mongodb+srv://99aryaa:qwe123@conestoga.erpyj64.mongodb.net/?retryWrites=true&w=majority&appName=Conestoga";
 
 // Config
 const app = express();
