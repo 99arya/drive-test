@@ -185,14 +185,18 @@ app.post("/login", async (req, res) => {
       return res.status(400).send("Invalid username or password.");
     }
     req.session.userId = user._id;
-    res.send({ message: "Login Successful", user: { username: user.username, userType: user.userType } });
+    res.send({
+      message: "Login Successful",
+      user: { username: user.username, userType: user.userType },
+    });
     console.log(req.user.userType);
   } catch (error) {
-      if (!res.headersSent) {
-        res.status(500).send(error.message);
-      } else {
-        console.error("Error during login:", error.message);
-      }  }
+    if (!res.headersSent) {
+      res.status(500).send(error.message);
+    } else {
+      console.error("Error during login:", error.message);
+    }
+  }
 });
 
 app.get("/logout", (req, res) => {
@@ -255,21 +259,16 @@ app.get("/get-slots/:date", async (req, res) => {
 });
 
 app.post("/book-slot", async (req, res) => {
-  const { selectedDate, selectedTime } = req.body;
+  const { selectedDate, selectedTime, testType } = req.body;
 
   const dateObj = new Date(selectedDate);
-  console.log("dateObj", dateObj);
+  console.log("testType", testType);
   const dateISO = dateObj.toISOString();
 
   try {
-    // const existingAppointment = await Appointment.findOne({
-    //   date: dateISO,
-    //   time: selectedTime,
-    // });
-
     let updatedAppointment = await Appointment.findOneAndUpdate(
       { date: dateISO, time: selectedTime },
-      { isTimeSlotAvailable: false }
+      { isTimeSlotAvailable: false, testType }
     );
 
     if (updatedAppointment) {
@@ -277,7 +276,7 @@ app.post("/book-slot", async (req, res) => {
 
       let updatedUser = await User.findOneAndUpdate(
         { _id: req.session.userId },
-        { appointment: updatedAppointment._id }
+        { appointment: updatedAppointment._id, testType }
       );
 
       console.log("updatedUser", updatedUser);
@@ -293,6 +292,70 @@ app.post("/book-slot", async (req, res) => {
   } catch (error) {
     console.log("err", error);
     res.status(500).send("Error updating car details: " + error.message);
+  }
+});
+
+app.get("/get-candidates/:testType", async (req, res) => {
+  const { testType } = req.params;
+  console.log("testType", testType);
+  let testTypeArr = testType == "ALL" ? ["G", "G2"] : [testType];
+
+  // const dateObj = new Date(date);
+  console.log("testTypeArr", testTypeArr);
+
+  // const dateISO = dateObj.toISOString();
+
+  try {
+    const candidates = await User.find({ testType: { $in: testTypeArr }, testTaken: false })
+      .populate("appointment")
+      .exec();
+
+    if (!candidates) {
+      res.status(404).send("No candidates Found");
+    } else {
+      res.json(candidates);
+    }
+  } catch (error) {
+    res.status(500).send("Error getting candidates: " + error.message);
+  }
+});
+
+app.post("/take-test", async (req, res) => {
+  const { userID, passedTest, testComment } = req.body;
+  console.log("userID, passedTest, testComment", userID, passedTest, testComment);
+
+  try {
+    let updatedUser = await User.findOneAndUpdate(
+      { _id: userID },
+      { passedTest, testComment, testTaken: true }
+    );
+
+    res.json(updatedUser);
+  } catch (error) {
+    res.status(500).send("Error updating test result: " + error.message);
+  }
+});
+
+app.get("/get-test-results/:passed", async (req, res) => {
+  const { passed } = req.params;
+  console.log("passed", passed);
+  let passedArr = passed == "ALL" ? [true, false] : [passed];
+
+  // const dateObj = new Date(date);
+  console.log("passedArr", passedArr);
+
+  // const dateISO = dateObj.toISOString();
+
+  try {
+    const candidates = await User.find({ testTaken: true }).populate("appointment").exec();
+    console.log("candidates", candidates);
+    if (!candidates) {
+      res.status(404).send("No candidates Found");
+    } else {
+      res.json(candidates);
+    }
+  } catch (error) {
+    res.status(500).send("Error getting candidates: " + error.message);
   }
 });
 

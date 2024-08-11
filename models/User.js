@@ -19,6 +19,10 @@ const UserSchema = new mongoose.Schema({
     plateNumber: { type: String, default: "default" },
   },
   appointment: { type: Schema.Types.ObjectId, ref: "Appointment" },
+  testType: { type: String },
+  passedTest: { type: Boolean, default: false },
+  testTaken: { type: Boolean, default: false },
+  testComment: { type: String },
 });
 
 // Pre-save hook to encrypt password and license number

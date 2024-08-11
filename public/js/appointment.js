@@ -1,4 +1,15 @@
 $(function () {
+  axios
+    .get(`/get-test-results/ALL`)
+    .then(function (response) {
+      let { data } = response;
+      console.log("data", data);
+      // renderTable(data);
+    })
+    .catch(function (error) {
+      alert("Error: " + error.response?.data);
+    });
+
   let selectedTime, selectedDate;
 
   $("#datepicker").datepicker();

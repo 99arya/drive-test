@@ -19,19 +19,26 @@ $(function () {
         let { data } = response;
 
         $(".no-slots").addClass("display-none");
+        $(".slot-card").addClass("display-none");
 
         if (data.length > 0) {
+          let anySlotAvailable = false;
           data.map((i) => {
             console.log("i=>", i);
             if (i.isTimeSlotAvailable) {
+              $(".slots").removeClass("display-none");
               let slot = document.getElementById(i.time);
               slot.classList.remove("display-none");
-            } else {
-              $(".no-slots").removeClass("display-none");
+              anySlotAvailable = true;
             }
           });
+          if (!anySlotAvailable)
+            $(".no-slots")
+              .removeClass("display-none")
+              .text("All available slots are booked for this day.");
         } else {
           $(".no-slots").removeClass("display-none");
+          $(".slots").addClass("display-none");
         }
       })
       .catch(function (error) {
@@ -53,7 +60,7 @@ $(function () {
   $("#book-slot").on("click", function (event) {
     console.log(" selectedDate, selectedTime ", selectedDate, selectedTime);
     axios
-      .post("/book-slot", { selectedDate, selectedTime })
+      .post("/book-slot", { selectedDate, selectedTime, testType: "G2" })
       .then(function (response) {
         alert(response.data.message);
         $(".date-time-selected").css("display", "none");

@@ -11,7 +11,7 @@
     <div class="mb-3">
       <label for="appointmentFilter" class="form-label">Filter by Test Type:</label>
       <select class="form-control" id="appointmentFilter">
-        <option value="all">All</option>
+        <option value="ALL">All</option>
         <option value="G2">G2 Test</option>
         <option value="G">G Test</option>
       </select>
@@ -21,6 +21,7 @@
         <tr>
           <th scope="col">Driver Name</th>
           <th scope="col">Test Type</th>
+          <th scope="col">Car Number</th>
           <th scope="col">Date & Time</th>
           <th scope="col">Action</th>
         </tr>
@@ -31,25 +32,48 @@
     </table>
   </div>
 
-  <!-- Driver Details Section -->
-  <div id="driverDetailsSection" class="d-none">
-    <h2>Driver Details</h2>
-    <p><strong>Name:</strong> <span id="driverName"></span></p>
-    <p><strong>Car Details:</strong> <span id="carDetails"></span></p>
-    <div class="mb-3">
-      <label for="examinerComments" class="form-label">Comments:</label>
-      <textarea class="form-control" id="examinerComments" rows="4"></textarea>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Test Result:</label>
-      <div>
-        <input type="radio" id="pass" name="testResult" value="Pass">
-        <label for="pass">Pass</label>
-        <input type="radio" id="fail" name="testResult" value="Fail">
-        <label for="fail">Fail</label>
+  <div
+    class="modal fade"
+    id="takeTestModal"
+    tabindex="-1"
+    aria-labelledby="takeTestModal"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Take Test</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Name:</strong> <span id="driverName"></span></p>
+          <p><strong>Test Type:</strong> <span id="testType"></span></p>
+          <p><strong>Date and Time:</strong> <span id="testDateTime"></span></p>
+          <p><strong>Car Details:</strong> <span id="carDetails"></span></p>
+          <p><strong>Plate Number:</strong> <span id="plateDetails"></span></p>
+          <div class="mb-3">
+            <label class="form-label">Test Result:</label>
+            <div>
+              <input type="radio" id="pass" name="testResult" value="PASS" />
+              <label for="pass">Pass</label>
+              <input type="radio" id="fail" name="testResult" value="FAIL" />
+              <label for="fail">Fail</label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="examinerComments" class="form-label">Comments:</label>
+            <textarea class="form-control" id="examinerComments" rows="4"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary submitTestResult">Save changes</button>
+        </div>
       </div>
     </div>
-    <button class="btn btn-primary" id="submitResult">Submit</button>
   </div>
 </div>
 
