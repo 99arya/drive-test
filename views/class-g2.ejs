@@ -119,6 +119,12 @@
   </form>
   <% if (user.testTaken){ %>
   <div>TEST RESULTS</div>
+  <!-- Test Result Section -->
+  <div class="test-result <%= user.passedTest ? 'pass' : 'fail' %>">
+    <h4>Drive Test Result</h4>
+    <p><strong>Status:</strong> <%= user.passedTest ? "PASS" : "FAIL" %></p>
+    <p><strong>Examiner's Comment:</strong> <%= user.testComment %></p>
+  </div>
 
   <% } else if(user.appointment){ %>
   <div class="appointment-booked">
