@@ -1,14 +1,36 @@
 $(function () {
-  axios
-    .get(`/get-test-results/ALL`)
-    .then(function (response) {
-      let { data } = response;
-      console.log("data", data);
-      // renderTable(data);
-    })
-    .catch(function (error) {
-      alert("Error: " + error.response?.data);
+  // Function to fetch and render test results based on filter
+  function fetchTestResults(filter = 'ALL') {
+    axios
+      .get(`/get-test-results/${filter}`)
+      .then(function (response) {
+        let { data } = response;
+        renderTestResults(data);
+      })
+      .catch(function (error) {
+        alert("Error: " + error.response?.data);
+      });
+  }
+
+  // Render test results in the table
+  function renderTestResults(data) {
+    const testResultsList = $("#testResultsList");
+    testResultsList.empty(); // Clear existing results
+
+    data.forEach(result => {
+      const row = `<tr>
+        <td>${result.driverName}</td>
+        <td>${result.testType}</td>
+        <td>${result.carNumber}</td>
+        <td>${result.dateTime}</td>
+        <td>${result.result}</td>
+      </tr>`;
+      testResultsList.append(row);
     });
+  }
+
+  // Initial fetch of test results with default filter 'ALL'
+  fetchTestResults();
 
   let selectedTime, selectedDate;
 
@@ -63,5 +85,11 @@ $(function () {
       .catch(function (error) {
         alert("Error: " + (error.response?.data || error.message));
       });
+  });
+
+  // Event listener for result filter change
+  $("#resultFilter").on("change", function () {
+    let selectedFilter = $(this).val();
+    fetchTestResults(selectedFilter);
   });
 });

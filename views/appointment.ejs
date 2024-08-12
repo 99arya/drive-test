@@ -1,3 +1,5 @@
+Appointment.ejs
+
 <!-- Import Header -->
 <%- include('components/header.ejs') %>
 
@@ -14,7 +16,7 @@
     <div class="row create-slot">
       <div class="col-8">
         <label>Select Date:</label>
-        <input type="text" id="datepicker" />
+        <input type="text" id="datePicker" />
       </div>
       <div class="col-4">
         <button id="search-appointment" class="btn btn-secondary">Search</button>
@@ -48,6 +50,35 @@
       </div>
     </div>
   </div>
+  <div class="mt-5">
+    <h4 class="mb-4 text-center">Test Results</h4>
+    <div class="row">
+      <div class="col-md-4">
+        <label for="resultFilter" class="form-label">Filter by Result:</label>
+        <select class="form-control" id="resultFilter">
+          <option value="ALL">All</option>
+          <option value="PASS">Pass</option>
+          <option value="FAIL">Fail</option>
+        </select>
+      </div>
+    </div>
+    <table class="table table-striped mt-4">
+      <thead>
+        <tr>
+          <th scope="col">Driver Name</th>
+          <th scope="col">Test Type</th>
+          <th scope="col">Car Number</th>
+          <th scope="col">Date & Time</th>
+          <th scope="col">Result</th>
+        </tr>
+      </thead>
+      <tbody id="testResultsList">
+        <!-- Test results will be dynamically populated here -->
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
 
   <!-- Description -->
 </div>
@@ -56,3 +87,4 @@
 
 <!-- Import Footer -->
 <%- include('components/footer.ejs') %>
+
