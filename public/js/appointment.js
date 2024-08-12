@@ -19,12 +19,15 @@ $(function () {
 
     console.log("data", data);
     data.forEach((result) => {
+      const dateString = new Date(result.appointment.date).toLocaleDateString();
       const row = `<tr>
         <td>${result.firstName} ${result.lastName}</td>
         <td>${result.testType}</td>
+        <td>${result.licenseNumber}</td>
         <td>${result.car_details.plateNumber}</td>
-        <td>${result.dateTime}</td>
+        <td>${dateString} ${result.appointment.time}</td>
         <td>${result.passedTest ? "PASSED" : "FAILED"}</td>
+        <td>${result.testComment}</td>
       </tr>`;
       testResultsList.append(row);
     });
@@ -39,6 +42,12 @@ $(function () {
 
   $("#search-appointment").on("click", function (event) {
     let dateEntered = $("#datepicker").datepicker("getDate");
+
+    if (!dateEntered) {
+      alert("Please enter a date!");
+      return;
+    }
+
     $(".available-slots").css("display", "block");
     $("#slot-date").text(dateEntered.toDateString());
 
