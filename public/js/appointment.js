@@ -1,6 +1,11 @@
 $(function () {
   // Function to fetch and render test results based on filter
   function fetchTestResults(filter = "ALL") {
+    if (filter == "PASS") {
+      filter = true;
+    } else if (filter == "FAIL") {
+      filter = false;
+    }
     axios
       .get(`/get-test-results/${filter}`)
       .then(function (response) {
@@ -100,6 +105,7 @@ $(function () {
   // Event listener for result filter change
   $("#resultFilter").on("change", function () {
     let selectedFilter = $(this).val();
+    console.log("selectedFilter", selectedFilter);
     fetchTestResults(selectedFilter);
   });
 });

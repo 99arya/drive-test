@@ -339,7 +339,7 @@ app.post("/take-test", async (req, res) => {
 app.get("/get-test-results/:passed", async (req, res) => {
   const { passed } = req.params;
   console.log("passed", passed);
-  let passedArr = passed == "ALL" ? [true, false] : [passed];
+  let passedArr = passed == "ALL" ? [true, false] : passed == "true" ? [true] : [false];
 
   // const dateObj = new Date(date);
   console.log("passedArr", passedArr);
@@ -347,7 +347,9 @@ app.get("/get-test-results/:passed", async (req, res) => {
   // const dateISO = dateObj.toISOString();
 
   try {
-    const candidates = await User.find({ testTaken: true }).populate("appointment").exec();
+    const candidates = await User.find({ passedTest: { $in: passedArr }, testTaken: true })
+      .populate("appointment")
+      .exec();
     console.log("candidates", candidates);
     if (!candidates) {
       res.status(404).send("No candidates Found");
