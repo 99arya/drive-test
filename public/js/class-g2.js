@@ -10,6 +10,11 @@ $(function () {
   $("#search-appointment-date").on("click", function (event) {
     let dateEntered = $("#datepicker").datepicker("getDate");
 
+    if (!dateEntered) {
+      alert("Please enter a date!");
+      return;
+    }
+
     $(".available-slots").css("display", "block");
     $("#slot-date").text(dateEntered.toDateString());
 

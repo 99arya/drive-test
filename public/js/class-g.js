@@ -108,4 +108,74 @@ $(function () {
   setTimeout(() => {
     $("#fetchLicenseData").click();
   }, 20);
+
+  // Search Date Click Handler
+  $("#search-appointment-date").on("click", function (event) {
+    let dateEntered = $("#datepicker").datepicker("getDate");
+
+    if (!dateEntered) {
+      alert("Please enter a date!");
+      return;
+    }
+
+    $(".available-slots").css("display", "block");
+    $("#slot-date").text(dateEntered.toDateString());
+
+    axios
+      .get(`/get-slots/${dateEntered.toDateString()}`)
+      .then(function (response) {
+        let { data } = response;
+
+        $(".no-slots").addClass("display-none");
+        $(".slot-card").addClass("display-none");
+
+        if (data.length > 0) {
+          let anySlotAvailable = false;
+          data.map((i) => {
+            console.log("i=>", i);
+            if (i.isTimeSlotAvailable) {
+              $(".slots").removeClass("display-none");
+              let slot = document.getElementById(i.time);
+              slot.classList.remove("display-none");
+              anySlotAvailable = true;
+            }
+          });
+          if (!anySlotAvailable)
+            $(".no-slots")
+              .removeClass("display-none")
+              .text("All available slots are booked for this day.");
+        } else {
+          $(".no-slots").removeClass("display-none");
+          $(".slots").addClass("display-none");
+        }
+      })
+      .catch(function (error) {
+        alert("Error: " + error.response?.data);
+      });
+  });
+
+  // Available slot click handler
+  $(".slot-available").on("click", function (event) {
+    $(".date-time-selected").css("display", "block");
+    selectedTime = event.currentTarget.innerText;
+    selectedDate = $("#datepicker").datepicker("getDate");
+
+    $(`#selected-date`).text(selectedDate.toDateString());
+    $(`#selected-time`).text(selectedTime);
+  });
+
+  // Book slot click handler
+  $("#book-slot").on("click", function (event) {
+    console.log(" selectedDate, selectedTime ", selectedDate, selectedTime);
+    axios
+      .post("/book-slot", { selectedDate, selectedTime, testType: "G" })
+      .then(function (response) {
+        alert(response.data.message);
+        $(".date-time-selected").css("display", "none");
+        window.location.reload();
+      })
+      .catch(function (error) {
+        alert("Error: " + (error.response?.data || error.message));
+      });
+  });
 });
