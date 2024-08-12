@@ -105,3 +105,17 @@ body .display-none {
   padding: 20px;
   border-radius: 5px;
 }
+
+.test-result {
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.pass {
+  border: 2px solid green;
+}
+
+.fail {
+  border: 2px solid red;
+}
