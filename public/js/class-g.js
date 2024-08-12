@@ -1,4 +1,5 @@
 $(function () {
+  $("#datepicker").datepicker();
   // Fetch user data with license number
   $("#fetchLicenseData").on("click", function (event) {
     const inputLicenseNumber = $("#inputLicenseNumber").val();

@@ -117,13 +117,16 @@
 
     <button type="button" id="g2-form" class="btn btn-primary mt-2 mb-2">Submit</button>
   </form>
+  <% if (user.testTaken){ %>
+  <div>TEST RESULTS</div>
 
-  <% if(user.appointment){ %>
+  <% } else if(user.appointment){ %>
   <div class="appointment-booked">
     <h5>Your appointment is booked for</h5>
     <h6><%= user.appointment.userAppointmentDate %></h6>
     <h6><%= user.appointment.time %></h6>
   </div>
+
   <% } else { %>
   <div class="container book-date">
     <h4 class="mb-4 text-center">Book Available Appointment Slot</h4>

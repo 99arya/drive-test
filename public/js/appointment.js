@@ -1,6 +1,6 @@
 $(function () {
   // Function to fetch and render test results based on filter
-  function fetchTestResults(filter = 'ALL') {
+  function fetchTestResults(filter = "ALL") {
     axios
       .get(`/get-test-results/${filter}`)
       .then(function (response) {
@@ -17,13 +17,14 @@ $(function () {
     const testResultsList = $("#testResultsList");
     testResultsList.empty(); // Clear existing results
 
-    data.forEach(result => {
+    console.log("data", data);
+    data.forEach((result) => {
       const row = `<tr>
-        <td>${result.driverName}</td>
+        <td>${result.firstName} ${result.lastName}</td>
         <td>${result.testType}</td>
-        <td>${result.carNumber}</td>
+        <td>${result.car_details.plateNumber}</td>
         <td>${result.dateTime}</td>
-        <td>${result.result}</td>
+        <td>${result.passedTest ? "PASSED" : "FAILED"}</td>
       </tr>`;
       testResultsList.append(row);
     });

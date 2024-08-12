@@ -1,5 +1,3 @@
-Appointment.ejs
-
 <!-- Import Header -->
 <%- include('components/header.ejs') %>
 
@@ -16,7 +14,7 @@ Appointment.ejs
     <div class="row create-slot">
       <div class="col-8">
         <label>Select Date:</label>
-        <input type="text" id="datePicker" />
+        <input type="text" id="datepicker" />
       </div>
       <div class="col-4">
         <button id="search-appointment" class="btn btn-secondary">Search</button>
@@ -78,13 +76,8 @@ Appointment.ejs
     </table>
   </div>
 </div>
-</div>
-
-  <!-- Description -->
-</div>
 
 <script src="./js/appointment.js"></script>
 
 <!-- Import Footer -->
 <%- include('components/footer.ejs') %>
-
